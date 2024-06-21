@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<head th:fragment="head">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Admin Page</title>
+    <!-- Custom fonts for this template-->
+    <link th:href="@{/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+    <!-- Custom styles for this template-->
+    <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+<!-- Page Wrapper -->
+<div id="wrapper">
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar" th:fragment="menu">
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+            <div class="sidebar-brand-icon" sec:authorize="hasRole('ADMIN')">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="sidebar-brand-icon" sec:authorize="hasRole('USER')">
+                <i class="fas fa-laugh-wink"></i>
+            </div>
+        </a>
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+            <li class="nav-item d-flex align-items-center" sec:authorize="isAuthenticated()">
+                <span class="navbar-text text-white ">Xin chào, <span sec:authentication="name" style="margin-right: 20px;"></span> </span>
+            </li>
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+                <form th:action="@{/logout}" method="post">
+                    <button class="btn btn-outline-light" type="submit">Logout</button>
+                </form>
+            </li>
+            <li class="nav-item" sec:authorize="!isAuthenticated()">
+                <a class="btn btn-outline-light" href="/login">Login</a>
+            </li>
+        </ul>
+
+        <!-- Người dùng -->
+        <li class="nav-item" sec:authorize="hasRole('ROLE_USER')">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne"
+               aria-expanded="true" aria-controls="collapseOne">
+                <span>Người Dùng</span>
+            </a>
+            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" th:href="@{/products/listproductUser}">Sản Phẩm</a>
+                    <a class="collapse-item" th:href="@{/cart}">Gỏi Hàng</a>
+                    <a class="collapse-item" th:href="@{/order/listOrder}">Lịch Sữ Đơn Hàng</a>
+                </div>
+            </div>
+        </li>
+
+        <!-- Admin -->
+        <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+               aria-expanded="true" aria-controls="collapseTwo">
+                <span>Chức Năng</span>
+            </a>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" th:href="@{/brands/listbrand}">Thương Hiệu</a>
+                    <a class="collapse-item" th:href="@{/manufacturers/listmanufacturer}">Nhà sản xuất</a>
+                    <a class="collapse-item" th:href="@{/order/listOrderAdmin}">Đơn Hàng</a>
+                    <a class="collapse-item" th:href="@{/categories/listcategory}">Danh mục</a>
+                    <a class="collapse-item" th:href="@{/products/listproduct}">Sản phẩm</a>
+                    <a class="collapse-item" th:href="@{/products/listproduct}">Thêm Sản Phẩm Từ Kho</a>
+                </div>
+            </div>
+        </li>
+
+    </ul>
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content" th:fragment="content">
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" th:fragment="nav-top">
+                <ul class="navbar-nav ml-auto">
+                    <div class="topbar-divider d-none d-sm-block"></div>
+                </ul>
+            </nav>
+        </div>
+        <footer  th:fragment="footer">
+        </footer>
+    </div>
+</div>
+
+<div th:fragment="script_src">
+    <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+    <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}"></script>
+    <script th:src="@{/js/sb-admin-2.min.js}"></script>
+</div>
+
+</body>
+</html>

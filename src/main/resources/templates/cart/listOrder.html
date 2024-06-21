@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="_layout :: head">
+    <title>List Orders</title>
+</head>
+<body>
+<div id="wrapper">
+    <div th:replace="~{_layout :: menu}"></div>
+    <div id="content-wrapper">
+        <div id="content">
+            <div th:replace="~{_layout :: nav-top}"></div>
+            <div class="container-fluid">
+                <div class="input-group m-1">
+                    <div class="form-outline w-25" data-mdb-input-init>
+                        <input type="search" id="search-input" class="form-control ml-2" placeholder="Nhập tên khách hàng cần tìm"/>
+                    </div>
+                </div>
+                <div id="content-display">
+                    <table id="myTable" class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Tên khách hàng</th>
+                            <th scope="col">Địa chỉ giao hàng</th>
+                            <th scope="col">Điện thoại</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Trạng thái</th>
+                            <th scope="col">Chức Năng</th>
+                        </tr>
+                        </thead>
+                        <tbody th:each="order : ${orders}">
+                        <tr>
+                            <td th:text="${order.id}"></td>
+                            <td th:text="${order.customerName}"></td>
+                            <td th:text="${order.shippingAddress}"></td>
+                            <td th:text="${order.phone}"></td>
+                            <td th:text="${order.email}"></td>
+                            <td th:text="${order.status}"></td>
+                            <td>
+                                <a class="btn btn-primary" th:href="@{/order/orderDetail/{id}(id=${order.id})}">Xem chi tiết</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div th:replace="~{_layout :: footer}"></div>
+    </div>
+</div>
+<div th:replace="~{_layout :: script_src}"></div>
+<script type="text/javascript">
+    $(document).ready(function (){
+        const searchBar = document.getElementById("search-input");
+        searchBar.addEventListener("change", function (){
+            let value = searchBar.value;
+            $.ajax({
+                url: "/orders/search",
+                data: {customerName: value},
+                type: "GET",
+                success: function (data){
+                    $("#content-display").html(data);
+                },
+                error: function (xhr){
+                    console.log(xhr);
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

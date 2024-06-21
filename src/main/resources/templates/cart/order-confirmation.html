@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="_layout :: head">
+  <title>Order Confirmation</title>
+</head>
+<body>
+<div id="wrapper">
+  <div th:replace="~{_layout :: menu}"></div>
+  <div id="content-wrapper">
+    <div id="content">
+      <div th:replace="~{_layout :: nav-top}"></div>
+      <div class="container-fluid">
+        <h1>Order Confirmation</h1>
+        <p th:text="${message}"></p>
+        <a th:href="@{/products/listproduct}" class="btn btn-primary">Go Home</a>
+      </div>
+    </div>
+    <div th:replace="~{_layout :: footer}"></div>
+  </div>
+</div>
+</body>
+</html>

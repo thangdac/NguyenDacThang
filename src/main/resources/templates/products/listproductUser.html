@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="_layout :: head">
+    <title>List Product</title>
+    <link rel="stylesheet" href="path/to/your/css/styles.css"/> <!-- Include your CSS file here -->
+</head>
+<body>
+<div id="wrapper">
+    <div th:replace="~{_layout :: menu}"></div>
+    <div id="content-wrapper">
+        <div id="content">
+            <div th:replace="~{_layout :: nav-top}"></div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-10 offset-md-1">
+                        <div class="input-group mt-3 mb-3">
+                            <input type="search" id="search-input" class="form-control ml-2" placeholder="Nhập tên sản phẩm cần tìm"/>
+                        </div>
+                    </div>
+                </div>
+                <div id="content-display" class="row">
+                    <div th:each="product : ${listProductUser}" class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <img th:if="${product.imagePath}" th:src="@{'/images/' + ${product.imagePath}}" class="card-img-top img-thumbnail rounded" alt="Product Image">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${product.name}"></h5>
+                                <p class="card-text">
+                                    Giá: <span th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 2, 'POINT')}"></span> VNĐ<br/>
+                                    Danh mục: <span th:text="${product.category.name}"></span><br/>
+                                    Nhà sản xuất: <span th:text="${product.manufacturer != null ? product.manufacturer.name : 'Unknown'}"></span><br/>
+                                    Thương hiệu: <span th:text="${product.brand != null ? product.brand.name : 'Unknown'}"></span>
+                                </p>
+                                <form th:action="@{/cart/add}" method="post">
+                                    <div class="input-group">
+                                        <input type="number" name="quantity" min="1" value="1" class="form-control" style="width: 70px;">
+                                        <input type="hidden" th:value="${product.id}" name="productId"/>
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-warning">Thêm vào giỏ hàng</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:replace="~{_layout :: footer}"></div>
+    </div>
+</div>
+<div th:replace="~{_layout :: script_src}"></div>
+<script type="text/javascript">
+    $(document).ready(function (){
+        const searchBar = document.getElementById("search-input");
+        searchBar.addEventListener("change", function (){
+            let value = searchBar.value;
+            $.ajax({
+                url: "/products/search",
+                data: {name: value},
+                type: "GET",
+                success: function (data){
+                    $("#content-display").html(data);
+                },
+                error: function (xhr){
+                    console.log(xhr);
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

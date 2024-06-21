@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="_layout :: head">
+    <title>Tải dữ liệu lên</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 300px;
+            margin: 0 auto;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        input[type="file"] {
+            margin-bottom: 10px;
+        }
+        button[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div id="wrapper">
+    <div th:replace="~{_layout :: menu}"></div>
+    <div id="content-wrapper">
+        <div id="content">
+            <div th:replace="~{_layout :: nav-top}"></div>
+            <div class="container-fluid">
+                <div class="input-group m-1">
+                    <div class="form-outline w-25" data-mdb-input-init>
+                        <input type="search" id="search-input" class="form-control ml-2" placeholder="Nhập tên sản phẩm cần tìm"/>
+                    </div>
+                </div>
+                <div id="content-display">
+                    <h2>Upload File</h2>
+                    <form th:action="@{/products/upload}" method="post" enctype="multipart/form-data">
+                        <input type="file" name="file" accept=".csv,.xlsx,.xls">
+                        <button type="submit">Tải lên</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div th:replace="~{_layout :: footer}"></div>
+    </div>
+</div>
+<div th:replace="~{_layout :: script_src}"></div>
+<script type="text/javascript">
+    $(document).ready(function (){
+        const searchBar = document.getElementById("search-input");
+        searchBar.addEventListener("change", function (){
+            let value = searchBar.value;
+            $.ajax({
+                url: "/products/searchbook",
+                data: {name: value},
+                type: "GET",
+                success: function (data){
+                    $("#content-display").html(data)
+                },
+                error: function (xhr){
+                    console.log(xhr);
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

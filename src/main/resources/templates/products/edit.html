@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="_layout :: head">
+    <title>Chỉnh sửa Sản phẩm</title>
+</head>
+<body>
+<div id="wrapper">
+    <div th:replace="~{_layout :: menu}"></div>
+    <div id="content-wrapper">
+        <div id="content">
+            <div th:replace="~{_layout :: nav-top}"></div>
+            <div class="container-fluid">
+                <h3 class="title">Chỉnh sửa Sản phẩm</h3>
+                <form th:action="@{/products/edit}" method="post" th:object="${product}" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="masanpham">Mã sản phẩm</label>
+                        <input type="text" class="form-control" id="masanpham" placeholder="Tên sản phẩm" th:field="*{id}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="tensanpham">Tên sản phẩm</label>
+                        <input type="text" class="form-control" id="tensanpham" placeholder="Tên sản phẩm" th:field="*{name}">
+                    </div>
+                    <div class="form-group">
+                        <label for="tensanpham">Số lượng sản phẩm</label>
+                        <input type="text" class="form-control" id="soluongsanpham" placeholder="Tên sản phẩm" th:field="*{productQuantities}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="giasanpham">Giá sản phẩm</label>
+                        <input type="number" class="form-control" id="giasanpham" placeholder="Giá sản phẩm"  th:field="*{price}">
+                    </div>
+                    <div class="form-group">
+                        <label for="loaisanpham">Loại sản phẩm</label>
+                        <select class="form-control" id="loaisanpham" th:field="*{category.id}">
+                            <option th:each="category : ${categories}" th:value="${category.id}"  th:text="${category.name}" th:selected="${category.id} == ${product.category.id}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="brand">Thương hiệu</label>
+                        <select class="form-control" id="brand" th:field="*{brand.id}">
+                            <option th:each="brand : ${brands}" th:value="${brand.id}" th:text="${brand.name}" th:selected="${brand.id} == ${product.brand.id}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="manufacturer">Nhà sản xuất</label>
+                        <select class="form-control" id="manufacturer" th:field="*{manufacturer.id}">
+                            <option th:each="manufacturer : ${manufacturers}" th:value="${manufacturer.id}" th:text="${manufacturer.name}" th:selected="${manufacturer.id} == ${product.manufacturer.id}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Hình ảnh hiện tại</label>
+
+                        <div>
+                            <img th:if="${product.imagePath}" th:src="@{'/images/' + ${product.imagePath}}" alt="Product Image" style="max-width: 100px; max-height: 100px;">
+                            <span th:unless="${product.imagePath}">No image available</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="image">Hình ảnh mới</label>
+                        <input type="file" class="form-control" id="image" name="image">
+                    </div>
+
+                    <input type="submit" class="btn btn-primary" value="Chỉnh sửa">
+                    <a th:href="@{/products/listproduct}" class="btn btn-info">Quay lại</a>
+                </form>
+            </div>
+        </div>
+        <div th:replace="~{_layout :: footer}"></div>
+    </div>
+</div>
+<div th:replace="~{_layout :: script_src}"></div>
+</body>
+</html>

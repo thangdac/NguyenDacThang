@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="_layout :: head">
+    <title>Order Detail</title>
+</head>
+<body>
+<div id="wrapper">
+    <div th:replace="~{_layout :: menu}"></div>
+    <div id="content-wrapper">
+        <div id="content">
+            <div th:replace="~{_layout :: nav-top}"></div>
+            <div class="container-fluid">
+                <h1>Order Detail</h1>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h2>Order Information</h2>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Order ID:</strong> <span th:text="${order.id}"></span></p>
+                        <p><strong>Customer Name:</strong> <span th:text="${order.customerName}"></span></p>
+                        <p><strong>Shipping Address:</strong> <span th:text="${order.shippingAddress}"></span></p>
+                        <p><strong>Phone:</strong> <span th:text="${order.phone}"></span></p>
+                        <p><strong>Email:</strong> <span th:text="${order.email}"></span></p>
+                        <p><strong>Notes:</strong> <span th:text="${order.notes}"></span></p>
+                        <p><strong>Payment Method:</strong> <span th:text="${order.paymentMethod}"></span></p>
+                        <p><strong>Status:</strong> <span th:text="${order.status}"></span></p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Order Items</h2>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Product</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Unit Price</th>
+                                <th scope="col">Total Price</th>
+                            </tr>
+                            </thead>
+                            <tbody th:each="detail : ${order.orderDetails}">
+                            <tr>
+                                <td th:text="${detail.product.name}"></td>
+                                <td th:text="${detail.quantity}"></td>
+                                <td th:text="${#numbers.formatDecimal(detail.product.price, 0, 'COMMA', 2, 'POINT')}"></td>
+                                <td th:text="${#numbers.formatDecimal(detail.quantity * detail.product.price, 0, 'COMMA', 2, 'POINT')}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:replace="~{_layout :: footer}"></div>
+    </div>
+</div>
+<div th:replace="~{_layout :: script_src}"></div>
+</body>
+</html>
