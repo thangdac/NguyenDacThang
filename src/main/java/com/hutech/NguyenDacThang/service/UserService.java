@@ -54,8 +54,8 @@ public class UserService implements UserDetailsService {
                 .build();
     }
     // Tìm kiếm người dùng dựa trên tên đăng nhập.
-    public Optional<User> findByUsername(String username) throws
-            UsernameNotFoundException {
-        return userRepository.findByUsername(username);
+    public User findByUsername(String username) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        return optionalUser.orElse(null); // Return null if optionalUser is empty
     }
 }

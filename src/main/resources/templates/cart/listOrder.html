@@ -16,32 +16,40 @@
                     </div>
                 </div>
                 <div id="content-display">
-                    <table id="myTable" class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Tên khách hàng</th>
-                            <th scope="col">Địa chỉ giao hàng</th>
-                            <th scope="col">Điện thoại</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Trạng thái</th>
-                            <th scope="col">Chức Năng</th>
-                        </tr>
-                        </thead>
-                        <tbody th:each="order : ${orders}">
-                        <tr>
-                            <td th:text="${order.id}"></td>
-                            <td th:text="${order.customerName}"></td>
-                            <td th:text="${order.shippingAddress}"></td>
-                            <td th:text="${order.phone}"></td>
-                            <td th:text="${order.email}"></td>
-                            <td th:text="${order.status}"></td>
-                            <td>
-                                <a class="btn btn-primary" th:href="@{/order/orderDetail/{id}(id=${order.id})}">Xem chi tiết</a>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    <div th:each="entry : ${ordersByUser}">
+                        <div class="user-section">
+                            <h3 th:text="${entry.key.username}">Tên khách hàng</h3>
+                            <p><strong>Email:</strong> <span th:text="${entry.key.email}"></span></p>
+                            <p><strong>Phone:</strong> <span th:text="${entry.key.phone}"></span></p>
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th scope="col">ID Đơn hàng</th>
+                                    <th scope="col">Địa chỉ giao hàng</th>
+                                    <th scope="col">Điện thoại</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Trạng thái</th>
+                                    <th scope="col">Chức Năng</th>
+                                </tr>
+                                </thead>
+                                <tbody th:each="order : ${entry.value}">
+                                <tr>
+                                    <td th:text="${order.id}"></td>
+                                    <td th:text="${order.shippingAddress}"></td>
+                                    <td th:text="${order.phone}"></td>
+                                    <td th:text="${order.email}"></td>
+                                    <td th:text="${order.status}"></td>
+                                    <td>
+                                        <a class="btn btn-primary" th:href="@{/order/orderDetail/{id}(id=${order.id})}">Xem chi tiết</a>
+                                        <form th:action="@{/order/confirmOrder/{id}(id=${order.id})}" method="post" style="display:inline;">
+                                            <input type="submit" class="btn btn-info" value="Xác nhận"/>
+                                        </form>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

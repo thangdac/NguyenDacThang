@@ -8,86 +8,104 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
-@AllArgsConstructor
-@Builder
+@NoArgsConstructor
 @Entity
 @Table(name = "user")
 public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(name = "username", length = 50, unique = true)
     @NotBlank(message = "Username is required")
     @Size(min = 1, max = 50, message = "Username must be between 1 and 50 characters")
-            private String username;
-            @Column(name = "password", length = 250)
-            @NotBlank(message = "Password is required")
-            private String password;
-            @Column(name = "email", length = 50, unique = true)
-            @NotBlank(message = "Email is required")
-            @Size(min = 1, max = 50, message = "Email must be between 1 and 50 characters")
+    private String username;
+
+    @Column(name = "password", length = 250)
+    @NotBlank(message = "Password is required")
+    private String password;
+
+    @Column(name = "email", length = 50, unique = true)
+    @NotBlank(message = "Email is required")
+    @Size(min = 1, max = 50, message = "Email must be between 1 and 50 characters")
     @Email
     private String email;
+
     @Column(name = "phone", length = 10, unique = true)
+    @NotBlank(message = "Phone is required")
     @Length(min = 10, max = 10, message = "Phone must be 10 characters")
-    @Pattern(regexp = "^[0-9]*$", message = "Phone must be number")
+    @Pattern(regexp = "^[0-9]*$", message = "Phone must be a number")
     private String phone;
+
     @Column(name = "provider", length = 50)
     private String provider;
-    @ManyToMany(fetch=FetchType.EAGER)
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<Role> userRoles = this.getRoles();
-        return userRoles.stream()
+        return roles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
-                .toList();
+                .collect(Collectors.toList());
     }
-    @Override
-    public String getPassword() {
-        return password;
-    }
-    @Override
-    public String getUsername() {
-        return username;
-    }
+
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return true; // Implement account expiration logic if needed
     }
+
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return true; // Implement account locking logic if needed
     }
+
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return true; // Implement credentials expiration logic if needed
     }
+
     @Override
     public boolean isEnabled() {
-        return true;
+        return true; // Implement account enabled/disabled logic if needed
     }
+
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.username;
+    }
+
+    // Implement other getters and setters as needed
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return
-                false;
+        if (o == null || getClass() != Hibernate.getClass(o)) return false;
         User user = (User) o;
-        return getId() != null && Objects.equals(getId(), user.getId());
+        return Objects.equals(id, user.id);
     }
+
     @Override
     public int hashCode() {
-        return getClass().hashCode();
+        return Objects.hash(id);
     }
 }
