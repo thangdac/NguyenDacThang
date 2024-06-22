@@ -48,6 +48,12 @@ public class User implements UserDetails {
     @Pattern(regexp = "^[0-9]*$", message = "Phone must be a number")
     private String phone;
 
+    @Column(name = "full_name", length = 100)
+    private String fullName;
+
+    @Column(name = "address", length = 255)
+    private String address;
+
     @Column(name = "provider", length = 50)
     private String provider;
 
@@ -94,7 +100,37 @@ public class User implements UserDetails {
         return this.username;
     }
 
-    // Implement other getters and setters as needed
+    public String getEmail() {
+        return this.email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return this.phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getFullName() {
+        return this.fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getAddress() {
+        return this.address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     @Override
     public boolean equals(Object o) {

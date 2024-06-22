@@ -35,7 +35,7 @@
                         <tr>
                             <td th:text="${product.id}"></td>
                             <td>
-                                <img th:if="${product.imagePath}" th:src="@{/images/} + ${product.imagePath}" alt="Product Image" style="max-width: 100px; max-height: 100px;">
+                                <img th:if="${product.imagePath}" th:src="@{'/images/' + ${product.imagePath}}" alt="Product Image" style="max-width: 100px; max-height: 100px;">
                                 <span th:unless="${product.imagePath}">No image available</span>
                             </td>
                             <td th:text="${product.name}"></td>

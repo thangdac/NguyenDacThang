@@ -9,6 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+
 @Controller // Đánh dấu lớp này là một Controller trong Spring MVC.
 @RequestMapping("/")
 @RequiredArgsConstructor
@@ -39,4 +42,20 @@ public class UserController {
         userService.setDefaultRole(user.getUsername()); // Gán vai trò mặc định cho người dùng
         return "redirect:/login"; // Chuyển hướng người dùng tới trang "login"
     }
+
+    //userProfile
+
+    @GetMapping("/profile")
+    public String showProfile(Model model, Principal principal) {
+        String username = principal.getName();
+        User user = userService.getUserProfile(username);
+        model.addAttribute("userProfile", user); // Đặt tên biến là "userProfile" để tham chiếu trong template
+        return "users/profile";
+    }
+    @PostMapping("/profile")
+    public String updateProfile(@ModelAttribute("user") User updatedUser) {
+        userService.updateUserProfile(updatedUser);
+        return "redirect:/profile";
+    }
+
 }
